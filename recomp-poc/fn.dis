@@ -1,0 +1,49 @@
+08049380 <NormaliseAndMag>:
+ 8049380:	mov    eax,DWORD PTR [esp+0x4]
+ 8049384:	fld    DWORD PTR [eax]
+ 8049386:	fld    DWORD PTR [eax+0x4]
+ 8049389:	fld    st(0)
+ 804938b:	fmul   st,st(1)
+ 804938d:	fld    st(2)
+ 804938f:	fmul   st,st(3)
+ 8049391:	faddp  st(1),st
+ 8049393:	fld    DWORD PTR [eax+0x8]
+ 8049396:	fld    st(0)
+ 8049398:	fmul   st,st(1)
+ 804939a:	faddp  st(2),st
+ 804939c:	fld1
+ 804939e:	fldz
+ 80493a0:	fucomip st,st(3)
+ 80493a2:	fld    st(0)
+ 80493a4:	jae    80493da <NormaliseAndMag+0x5a>
+ 80493a6:	fstp   st(1)
+ 80493a8:	fstp   st(0)
+ 80493aa:	fxch   st(1)
+ 80493ac:	fsqrt
+ 80493ae:	fld1
+ 80493b0:	fdivr  st(1),st
+ 80493b2:	fxch   st(4)
+ 80493b4:	fmul   st,st(1)
+ 80493b6:	fxch   st(3)
+ 80493b8:	fmul   st,st(1)
+ 80493ba:	fstp   DWORD PTR [eax+0x4]
+ 80493bd:	fmul   st(1),st
+ 80493bf:	fxch   st(1)
+ 80493c1:	fstp   DWORD PTR [eax+0x8]
+ 80493c4:	fdivp  st(2),st
+ 80493c6:	fldz
+ 80493c8:	fldz
+ 80493ca:	fldz
+ 80493cc:	fldz
+ 80493ce:	fxch   st(3)
+ 80493d0:	fxch   st(5)
+ 80493d2:	fxch   st(2)
+ 80493d4:	fxch   st(4)
+ 80493d6:	fxch   st(1)
+ 80493d8:	fxch   st(2)
+ 80493da:	fstp   st(5)
+ 80493dc:	fstp   st(3)
+ 80493de:	fstp   st(0)
+ 80493e0:	fstp   st(0)
+ 80493e2:	fstp   DWORD PTR [eax]
+ 80493e4:	ret

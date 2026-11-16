@@ -1,0 +1,8 @@
+Prueba Fase 1 (sustituto): CVector::NormaliseAndMag compilada a x86-32 x87 -> traducida automáticamente
+desde su desensamblado (lift.py) -> C -> WebAssembly, comparada bit a bit con la ejecución nativa (1.000.000 de casos).
+Reproducir (Linux x86-64 con clang 18 + node):
+  N=1000000; for pc in 0 2; do clang -m32 -O2 -mno-sse -mfpmath=387 -fno-math-errno -ffreestanding -fno-stack-protector -nostdlib -static -DN=$N -DPC=$pc -o nat_pc$pc native32.c fn.c; ./nat_pc$pc > nat_pc$pc.bin; done
+  objdump -d --no-show-raw-insn -M intel nat_pc0 | awk '/<NormaliseAndMag>:/{f=1} f{print} f&&/ret/{exit}' > fn.dis
+  python3 lift.py fn.dis > lifted.c
+  for pc in 0 2; do clang --target=wasm32 -O2 -nostdlib -DPC=$pc -Wl,--no-entry -Wl,-z,stack-size=65536 -Wl,--initial-memory=33554432 -o lift_pc$pc.wasm wasm_lift.c; done
+  node runlift.mjs   # luego comparar nat_pcX.bin con lift_pcX.bin
