@@ -1,0 +1,18 @@
+# OpenSA (AGPL-3.0) - build de prueba Fase 1A. No contiene archivos de GTA San Andreas.
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.wasm"
+  [headers.values]
+    Content-Type = "application/wasm"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

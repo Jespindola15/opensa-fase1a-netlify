@@ -1,0 +1,12 @@
+// Medidor Fase 1A (no forma parte de OpenSA): FPS, frame time, memoria y tiempo de carga.
+(()=>{const B=window.__bench={fps:0,avg:0,p99:0,low1:0,heapMB:0,loadS:null,samples:[]};let ft=[],last=performance.now(),clickT=null,acc=0,n=0;
+document.addEventListener('click',e=>{if(/choose game folder/i.test(e.target.textContent||''))clickT=performance.now()},true);
+const el=document.createElement('div');el.style.cssText='position:fixed;left:8px;bottom:8px;z-index:99999;background:#000c;color:#0f0;font:12px monospace;padding:6px 8px;pointer-events:none;white-space:pre';
+addEventListener('DOMContentLoaded',()=>document.body.appendChild(el));
+const loading=()=>/STREAMING|PAINTING|UNFOLDING|ALMOST THERE|LOADING TEXTURES|WAXING/i.test(document.body?document.body.innerText:'');
+function f(t){const d=t-last;last=t;ft.push(d);if(ft.length>600)ft.shift();acc+=d;n++;
+ if(clickT&&B.loadS===null&&t-clickT>3000&&!loading()&&document.querySelector('canvas'))B.loadS=((t-clickT)/1000).toFixed(1);
+ if(acc>=1000){B.fps=(n*1000/acc).toFixed(0);acc=0;n=0;const s=[...ft].sort((a,b)=>a-b);B.avg=(s.reduce((a,b)=>a+b,0)/s.length).toFixed(1);B.p99=s[Math.floor(s.length*.99)].toFixed(1);B.low1=(1000/s[Math.floor(s.length*.99)]).toFixed(0);
+  B.heapMB=performance.memory?(performance.memory.usedJSHeapSize/1048576).toFixed(0):'?';B.samples.push({t:Math.round(t/1000),fps:+B.fps,heap:+B.heapMB});if(B.samples.length>900)B.samples.shift();
+  el.textContent=`FPS ${B.fps}  (1% low ${B.low1})\nframe ${B.avg} ms  p99 ${B.p99} ms\nJS heap ${B.heapMB} MB\ncarga ${B.loadS??(clickT?'…':'-')} s`;}
+ requestAnimationFrame(f)}requestAnimationFrame(f)})();

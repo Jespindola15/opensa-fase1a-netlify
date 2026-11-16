@@ -1,0 +1,24 @@
+diff --git a/packages/loaders/src/asset-local-loader/install-source.ts b/packages/loaders/src/asset-local-loader/install-source.ts
+index 8e5c337..4b0474f 100644
+--- a/packages/loaders/src/asset-local-loader/install-source.ts
++++ b/packages/loaders/src/asset-local-loader/install-source.ts
+@@ -11,7 +11,9 @@ import { fileHandleSource, openLazyVer2 } from './img-reader';
+ const GTA3 = 'models/gta3.img';
+ const GTA_INT = 'models/gta_int.img';
+ /** Archives served lazily or unused — kept out of the loose-file set. */
+-const EXCLUDED = new Set(['anim/anim.img', GTA3, GTA_INT]);
++const EXCLUDED = new Set(['anim/anim.img', 'anim/cuts.img', 'models/cutscene.img', GTA3, GTA_INT]);
++/** Install folders the engine never reads (audio streams/SFX, FMV) — skipped so they aren't loaded into memory. */
++const EXCLUDED_DIRS = ['audio/', 'movies/', 'readme/'];
+ 
+ /** Build an {@link InstallSource} over a picked install directory (opens the IMG archives lazily). */
+ export async function browserInstallSource(dir: FileSystemDirectoryHandle): Promise<InstallSource> {
+@@ -28,7 +30,7 @@ export async function browserInstallSource(dir: FileSystemDirectoryHandle): Prom
+   const gtaIntHandle = handles.get(GTA_INT);
+   const gtaInt = gtaIntHandle ? await openLazyVer2(await fileHandleSource(gtaIntHandle)) : null;
+ 
+-  const loose = [...handles.keys()].filter((path) => !EXCLUDED.has(path) && !path.endsWith('.ds_store'));
++  const loose = [...handles.keys()].filter((path) => !EXCLUDED.has(path) && !EXCLUDED_DIRS.some((dir) => path.startsWith(dir)) && !path.endsWith('.ds_store'));
+   const readLoose = async (path: string): Promise<Uint8Array> => {
+     const handle = handles.get(path);
+     if (!handle) {
