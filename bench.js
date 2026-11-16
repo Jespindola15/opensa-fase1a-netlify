@@ -10,3 +10,15 @@ function f(t){const d=t-last;last=t;ft.push(d);if(ft.length>600)ft.shift();acc+=
   B.heapMB=performance.memory?(performance.memory.usedJSHeapSize/1048576).toFixed(0):'?';B.samples.push({t:Math.round(t/1000),fps:+B.fps,heap:+B.heapMB});if(B.samples.length>900)B.samples.shift();
   el.textContent=`FPS ${B.fps}  (1% low ${B.low1})\nframe ${B.avg} ms  p99 ${B.p99} ms\nJS heap ${B.heapMB} MB\ncarga ${B.loadS??(clickT?'…':'-')} s`;}
  requestAnimationFrame(f)}requestAnimationFrame(f)})();
+
+// Diagnóstico Fase 1A: muestra en pantalla el selector de carpetas y cualquier error, sin abrir la consola.
+(()=>{const D=window.__diag=[];const box=document.createElement('div');
+box.style.cssText='position:fixed;left:8px;bottom:84px;z-index:99999;max-width:60vw;background:#300c;color:#fbb;font:12px monospace;padding:6px 8px;white-space:pre-wrap;pointer-events:none;display:none';
+addEventListener('DOMContentLoaded',()=>document.body.appendChild(box));
+const L=(...a)=>{const m=a.map(x=>x&&x.message?x.name+': '+x.message:String(x)).join(' ').slice(0,300);D.push(m);if(D.length>8)D.shift();box.textContent='DIAGNÓSTICO\n'+D.join('\n');box.style.display='block'};
+addEventListener('error',e=>L('error',e.message));addEventListener('unhandledrejection',e=>L('rechazo',e.reason));
+const ce=console.error.bind(console);console.error=(...a)=>{L('console.error',...a);ce(...a)};
+if(window.showDirectoryPicker){const o=window.showDirectoryPicker.bind(window);window.showDirectoryPicker=async(op)=>{L('selector abierto');try{const h=await o(op);L('carpeta elegida:',h.name);return h}catch(e){L('selector:',e);throw e}};}
+else L('Este navegador no tiene showDirectoryPicker (usá Chrome o Edge de escritorio)');
+let last='';setInterval(()=>{const t=(document.body&&document.body.innerText||'').match(/folder access[^\n]*|denied[^\n]*|not found[^\n]*|error[^\n]*/i);if(t&&t[0]!==last){last=t[0];L('pantalla:',t[0])}},1000);
+})();
