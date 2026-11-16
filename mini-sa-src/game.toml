@@ -1,0 +1,44 @@
+# Mini-SA: ejecutable Win32 de prueba propio (no contiene código de Rockstar).
+[game]
+id = "minisa"
+name = "Mini-SA"
+app_name = "MiniSA"
+bundle_id = "dev.minisa.test"
+executable = "MINISA.EXE"
+sha256 = "0b3e21ff5b781aeb683d69a4c53957cbb64bfa710dc11bf64a342b14dd5585cc"
+image_base = 0x00400000
+entry_point = 0x00401d30
+guest_root = 'C:\MiniSA'
+developer_exe = "original/MINISA.EXE"
+windows_version = "5.1"
+
+[system]
+desktop = "960x540"
+memory_mb = 256
+
+[translate]
+function_alignment = 16
+listings = "analysis/MINISA.EXE"
+globals = "globals.toml"
+animation_counter = 0x00700100
+volatile_reads = []
+entry_points = []
+
+[hooks]
+frame_clock_begin = 0x00780000
+frame_clock_wait = 0x00780010
+frame_clock_wait_clamp = 0x00780020
+frame_clock_clamp_deadline = 0x00790000
+frame_clock_wait_deadline = 0x00790010
+cursor_surface_ptrs = [0x00790100, 0x00790104]
+mouse_vtable = 0x00790200
+mouse_device_ptr = 0x00790300
+mouse_device_right = 0x00790340
+camera = 0x00790400
+
+[controls]
+default_layout = "hidden"
+pad = "off"
+
+[bundle]
+exclude = []

@@ -1,0 +1,3 @@
+recomp-stream-v1
+22768	MINISA.EXE
+8388608	world.dat

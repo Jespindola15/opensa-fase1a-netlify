@@ -16,3 +16,12 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Mini-SA (prueba de recompilación Win32 -> WebAssembly): necesita aislamiento de origen
+# (SharedArrayBuffer para los hilos). Solo se aplica a /mini-sa/, no afecta a OpenSA.
+[[headers]]
+  for = "/mini-sa/*"
+  [headers.values]
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Resource-Policy = "same-origin"
