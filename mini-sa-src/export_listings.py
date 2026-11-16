@@ -5,16 +5,16 @@ from pathlib import Path
 sys.path.insert(0, sys.argv[3])
 import translate as T
 exe, out = Path(sys.argv[1]), Path(sys.argv[2])
-nm = subprocess.run(["i686-w64-mingw32-nm", "-n", str(exe)], capture_output=True, text=True, check=True).stdout
+syms = subprocess.run(["i686-w64-mingw32-objdump", "-t", str(exe)], capture_output=True, text=True, check=True).stdout
 img = T.Image(exe)
 starts = {}
-for line in nm.splitlines():
-    p = line.split(None, 2)
-    if len(p) < 3: continue
-    a, t, name = p
-    if t.lower() == "t" and not name.startswith(".") and "CTOR_LIST" not in name and "DTOR_LIST" not in name:
-        va = int(a, 16)
-        if img.is_exec(va): starts.setdefault(va, name)
+import re
+for line in syms.splitlines():
+    # [  n](sec  1)(fl 0x00)(ty   20)(scl   2) (nx 0) 0x00000a30 _physics_step   -> ty 20 = función COFF
+    m = re.search(r"\(sec\s+1\)\(fl 0x00\)\(ty\s+20\)\(scl\s+\d+\) \(nx \d+\) 0x([0-9a-f]+) (\S+)", line)
+    if not m: continue
+    va = int(m.group(1), 16) + img.base + 0x1000
+    if img.is_exec(va): starts.setdefault(va, m.group(2))
 listed = set(starts)
 (out / "functions").mkdir(parents=True, exist_ok=True)
 rows = ["address\tname\tbytes\tstatus\tmessage"]

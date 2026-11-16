@@ -1,0 +1,21 @@
+<!doctype html>
+<!-- The player page for one game's web build. tools/web_launcher.py places it,
+     with MiniSA22.js/.wasm/.data, in <launcher>/<game id>/; the game's files were
+     imported by the launcher into the browser's private storage at
+     <game id>/game, and the profile lives at <game id>/profile. The page must
+     be served cross-origin isolated (COOP same-origin, COEP require-corp). -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; object-src 'none'; base-uri 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini-SA 2</title>
+<link rel="stylesheet" href="style.css?v=1b1c9af49c27c286">
+</head>
+<body>
+<canvas id="canvas" tabindex="-1"></canvas>
+<div id="status">Loading…</div>
+<div id="stream" hidden></div>
+<script type="module" src="player.js?v=1b1c9af49c27c286"></script>
+</body>
+</html>

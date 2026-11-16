@@ -1,0 +1,5 @@
+recomp-stream-v1
+118650	MINISA2.EXE
+17388	radio.ogg
+67108864	stream.img
+8388608	world.dat

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "minisa2",
+    "title": "Mini-SA 2",
+    "executable": "MINISA2.EXE",
+    "exeDir": "",
+    "sha256": "6251641701693d2dc50d9e126cdec6a7a236258b6e4b372d9678006cb9a5f25c",
+    "requiredDirs": [],
+    "exclude": [],
+    "store": "",
+    "installNames": [],
+    "minFreeMb": 0,
+    "streamManifest": "./minisa2/data/manifest.txt"
+  }
+]
