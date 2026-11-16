@@ -1,3 +1,15 @@
+diff --git a/apps/web/src/game-config.tsx b/apps/web/src/game-config.tsx
+index 3748b31..efa013e 100644
+--- a/apps/web/src/game-config.tsx
++++ b/apps/web/src/game-config.tsx
+@@ -70,6 +70,7 @@ export type GameId = 'gostown' | 'original' | 'original-extend';
+ export const GAME_CONFIG: Record<GameId, GameConfig> = {
+   gostown: {
+     assetLoader: 'fetch',
++    devOnly: true, // Fase 1A: el mod no se publica; solo queda San Andreas con archivos propios
+     disclaimer: (
+       <>
+         <p>
 diff --git a/packages/loaders/src/asset-local-loader/install-source.ts b/packages/loaders/src/asset-local-loader/install-source.ts
 index 8e5c337..4b0474f 100644
 --- a/packages/loaders/src/asset-local-loader/install-source.ts
